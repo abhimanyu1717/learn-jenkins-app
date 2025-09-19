@@ -18,10 +18,17 @@ pipeline {
               npm --version
               npm ci
               npm run build
-              echo "List of all file after bild......"
+              echo "List of all file after build......"
               ls -la
               '''
           }
+      }
+      stage('Test') {
+        steps {
+          sh '''
+            test -f build/index.html
+          '''
+        }
       }
   }
 }
