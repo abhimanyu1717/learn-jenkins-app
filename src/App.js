@@ -1,10 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
-/** addind commen to checck my commits  ****/
+
 function App() {
   return (
     <div className="App">
-      <h1>Learn Jenkins</h1>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <a
