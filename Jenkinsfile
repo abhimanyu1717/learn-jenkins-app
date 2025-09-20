@@ -2,8 +2,6 @@ pipeline {
   agent any
 
   stages {
-    stage ('Build and Test') {
-      parallel  {
       stage('Build') {
         agent {
             docker {
@@ -39,8 +37,7 @@ pipeline {
           '''
         }
       }
-  }
-  }
+  
   }
   post {
     always {
