@@ -47,9 +47,8 @@ pipeline {
         steps {
           sh '''
             npm install netlify-cli
-            npm audit fix --force
             echo "******** Netlify version*******"
-            node-modules/.bin/netlify --version
+            node_modules/.bin/netlify --version
           '''
         }
       }
