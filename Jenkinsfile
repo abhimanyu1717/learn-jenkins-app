@@ -41,6 +41,14 @@ pipeline {
           '''
         }
       }
+       stage('Approval for Lower Env...') {
+            steps {
+                timeout(1) {
+                    input message: 'Please approve deployment?', ok: 'Approved for Deployment'
+                 }
+             
+            }
+        }
        stage('Deployment Staging') {
         agent{
             docker {
