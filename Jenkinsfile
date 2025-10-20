@@ -41,14 +41,6 @@ pipeline {
           '''
         }
       }
-       stage('Approval for Lower Env...') {
-            steps {
-                timeout(1) {
-                    input message: 'Please approve deployment?', ok: 'Approved for Deployment'
-                 }
-             
-            }
-        }
        stage('Deployment Staging') {
         agent{
             docker {
@@ -68,7 +60,14 @@ pipeline {
           '''
         }
       }
-
+      stage('Approval for Lower Env...') {
+                steps {
+                    timeout(5) {
+                        input message: 'Please approve deployment?', ok: 'Approved for Prod Deployment'
+                      }
+                  
+                }
+            }
       stage('Deployment prod') {
         agent{
             docker {
