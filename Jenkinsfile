@@ -14,6 +14,7 @@ pipeline {
         }
           steps {
               sh '''
+              echo "Added comment to check Poll scm command..."
               echo "List of all file before build............"
               ls -la
               echo 'Node and npm version....'
@@ -40,7 +41,27 @@ pipeline {
           '''
         }
       }
-      stage('Deployment') {
+       stage('Deployment Staging') {
+        agent{
+            docker {
+                 image 'node:18-alpine'
+                reuseNode true
+            }
+        }
+        steps {
+          sh '''
+            npm install netlify-cli@20.1.1
+            echo "******** Netlify version*******"
+            node_modules/.bin/netlify --version
+            echo "Deploying to production Site Id:$NETLIFY_SITE_ID"
+             node_modules/.bin/netlify status
+             node_modules/.bin/netlify deploy --dir=build
+
+          '''
+        }
+      }
+
+      stage('Deployment prod') {
         agent{
             docker {
                  image 'node:18-alpine'
