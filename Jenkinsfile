@@ -60,7 +60,7 @@ pipeline {
           '''
         }
       }
-      stage('Approval for Lower Env...') {
+      stage('Approval for Prod Env...') {
                 steps {
                     timeout(5) {
                         input message: 'Please approve deployment?', ok: 'Approved for Prod Deployment'
