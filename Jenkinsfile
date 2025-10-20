@@ -53,8 +53,6 @@ pipeline {
             npm install netlify-cli@20.1.1
             echo "******** Netlify version*******"
             node_modules/.bin/netlify --version
-            node_modules/.bin/netlify logout
-            node_modules/.bin/netlify login
             echo "Deploying to Staging Site Id:$NETLIFY_SITE_ID"
              node_modules/.bin/netlify status
              node_modules/.bin/netlify deploy --dir=build
