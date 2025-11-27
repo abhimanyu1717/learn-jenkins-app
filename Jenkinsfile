@@ -29,28 +29,7 @@ pipeline {
           }
       }
 
-        stage('AWS') {
-            agent {
-                docker {
-                    image 'amazon/aws-cli'
-                     reuseNode true
-                    args "--entrypoint=''"
-                    
-                }
-            }
-            environment {
-              aws_s3_bucket ='learn-jenkins-27-11-2025'
-            }
-            steps {
-            withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-            // some block
-              sh '''
-                aws --version
-                aws s3 sync build s3://$aws_s3_bucket
-              '''
-            }
-            }
-        }
+        
 
 
       stage('Test') {
@@ -92,22 +71,28 @@ pipeline {
                   
                 }
             }
-      stage('Deployment prod') {
-        agent{
-            docker {
-                image 'my-playwrigh'
-                reuseNode true
+      stage('AWS Production') {
+            agent {
+                docker {
+                    image 'amazon/aws-cli'
+                     reuseNode true
+                    args "--entrypoint=''"
+                    
+                }
+            }
+            environment {
+              aws_s3_bucket ='learn-jenkins-27-11-2025'
+            }
+            steps {
+            withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+            // some block
+              sh '''
+                aws --version
+                aws s3 sync build s3://$aws_s3_bucket
+              '''
+            }
             }
         }
-        steps {
-          sh '''
-            echo "Deploying to production Site Id:$NETLIFY_SITE_ID"
-             netlify status
-             netlify deploy --dir=build --prod
-
-          '''
-        }
-      }
   
   }
 
