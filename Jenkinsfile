@@ -5,24 +5,7 @@ pipeline {
     NETLIFY_AUTH_TOKEN = credentials('netlify-token')
   }
   stages {
-     stage('AWS') {
-            agent {
-                docker {
-                    image 'amazon/aws-cli'
-                    args "--entrypoint=''"
-                }
-            }
-            steps {
-            withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-            // some block
-              sh '''
-                aws --version
-                echo "Hellow s3" > index.html
-                aws s3 cp index.html s3://learn-jenkins-27-11-2025/index.html
-              '''
-            }
-            }
-        }
+   
       stage('Build') {
         agent {
             docker {
@@ -45,6 +28,31 @@ pipeline {
               '''
           }
       }
+
+        stage('AWS') {
+            agent {
+                docker {
+                    image 'amazon/aws-cli'
+                     reuseNode true
+                    args "--entrypoint=''"
+                    
+                }
+            }
+            environment {
+              aws_s3_bucket ='learn-jenkins-27-11-2025'
+            }
+            steps {
+            withCredentials([usernamePassword(credentialsId: 'aws-cred', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+            // some block
+              sh '''
+                aws --version
+                aws s3 cp build s3://$aws_s3_bucket/
+              '''
+            }
+            }
+        }
+
+
       stage('Test') {
         agent{
             docker {
