@@ -5,19 +5,19 @@ pipeline {
     NETLIFY_AUTH_TOKEN = credentials('netlify-token')
   }
   stages {
-      stage('aws') {
-        agent {
-          docker {
-            image 'amazon/aws-cli'
-          }
+     stage('AWS') {
+            agent {
+                docker {
+                    image 'amazon/aws-cli'
+                    args "--entrypoint=''"
+                }
+            }
+            steps {
+                sh '''
+                    aws --version
+                '''
+            }
         }
-        steps {
-          sh ''' 
-             docker --version
-          '''
-        }
-        
-      }
       stage('Build') {
         agent {
             docker {
